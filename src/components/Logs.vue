@@ -1,0 +1,58 @@
+<template>
+  <v-card color="silver" style="opacity: 0.8" class="pa-4">
+    <v-card-title>Всички обходи</v-card-title>
+    <v-card-text>
+      <v-expansion-panels>
+        <v-expansion-panel v-for="(log, index) in logs" :key="index">
+          <v-expansion-panel-title>{{ log.datetime }}</v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <v-row>
+              <v-col
+                cols="12"
+                v-for="(log, index) in log.machines"
+                :key="index"
+              >
+                <h2>{{ log.name }}</h2>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    v-for="(property, index) in log.properties"
+                    :key="index"
+                  >
+                    <span>{{ property.name }}</span>
+                    <span class="ml-2">{{ property.value }}</span>
+                    <span class="ml-2">{{ property.unit }}</span>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-card-text>
+    <v-card-action>
+      <!-- <v-btn variant="outlined" color="orange"> Опресни</v-btn> -->
+    </v-card-action>
+  </v-card>
+</template>
+
+<script setup>
+import { firestore } from "../firebase";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { ref } from "vue";
+const logs = ref([]);
+const loadLogs = async () => {
+  const citiesCol = collection(firestore, "logs");
+  const citySnapshot = await getDocs(citiesCol);
+  const cityList = citySnapshot.docs.map((doc) => doc.data());
+
+  logs.value = cityList
+    .map((x) => JSON.parse(x.text))
+    .sort(function (a, b) {
+      return new Date(b.datetime) - new Date(a.datetime);
+    });
+
+};
+
+loadLogs();
+</script>
