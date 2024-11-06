@@ -2,9 +2,13 @@
   <v-card color="silver" style="opacity: 0.8" class="pa-4" v-if="currentLog">
     <v-card-title
       ><span>Нов обход</span
-      ><span class="ml-5">{{ currentLog.datetime }}</span></v-card-title
-    >
+      ><v-text-field
+        label="Околна температура"
+        v-model="currentLog.tAmb"
+      ></v-text-field
+    ></v-card-title>
     <v-card-text>
+      <v-textarea label="Забележка" v-model="currentLog.note"></v-textarea>
       <v-card
         color="silver"
         style="opacity: 0.9"
@@ -68,9 +72,12 @@ import moment from "moment";
 import router from "../router/index";
 const log = ref({
   name: "Обход",
+  note: "Няма забележки",
+  tAmb: 10,
   machines: [
     {
       name: "AT701 Ф.А",
+
       properties: [
         {
           name: "Ниво казан",
@@ -510,7 +517,7 @@ const log = ref({
           step: 1,
         },
         {
-          name: "Температура",
+          name: "Ниво янсен",
           type: "number",
           unit: "°C",
           value: 0,

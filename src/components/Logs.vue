@@ -6,6 +6,8 @@
         <v-expansion-panel v-for="(log, index) in logs" :key="index">
           <v-expansion-panel-title>{{ log.datetime }}</v-expansion-panel-title>
           <v-expansion-panel-text>
+            <h3>Околна темп.:{{ log.tAmb }} °C</h3>
+            <div>Забележки:{{ log.note }}</div>
             <v-row>
               <v-col
                 cols="12"
