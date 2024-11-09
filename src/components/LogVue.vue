@@ -1,5 +1,5 @@
 <template>
-  <v-card color="silver"  class="pa-0" style="opacity: 0.8;"  v-if="currentLog">
+  <v-card color="silver" class="pa-0" style="opacity: 0.8" v-if="currentLog">
     <v-card-title
       ><span>Нов обход</span
       ><v-text-field
@@ -34,18 +34,20 @@
                 >
                   <template #append>
                     <v-btn
-                    size="large"
+                      size="large"
                       @click="
-                        property.value =
+                        property.value = (
                           Number(property.value) + Number(property.step)
+                        ).toFixed(1)
                       "
                       ><h2>+</h2></v-btn
                     >
                     <v-btn
-                    size="large"
+                      size="large"
                       @click="
-                        property.value =
+                        property.value = (
                           Number(property.value) - Number(property.step)
+                        ).toFixed(1)
                       "
                       ><h2>-</h2></v-btn
                     >
@@ -59,10 +61,19 @@
       </v-card>
     </v-card-text>
     <v-card-action class="mb-16">
-      <v-btn size="large" variant="outlined" color="orange" @click="addItem">Запази</v-btn>
+      <v-card class="pa-10">
+        <v-btn
+          size="x-large"
+          variant="outlined"
+          color="orange"
+          :loading="loading"
+          @click="addItem"
+          >Запази</v-btn
+        >
+      </v-card>
     </v-card-action>
   </v-card>
-  <h2 v-else>Зареждане...</h2>
+  <Loader v-else></Loader>
 </template>
 
 <script setup>
@@ -72,6 +83,7 @@ import { firestore } from "../firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import moment from "moment";
 import router from "../router/index";
+import Loader from "./Loader.vue";
 const log = ref({
   name: "Обход",
   note: "",
@@ -550,15 +562,17 @@ const log = ref({
   datetime: "06-11-2024 16:52",
 });
 const currentLog = ref(null);
-
+const loading = ref(false);
 const logsRef = collection(firestore, "logs");
 
 const items = useCollection(logsRef);
 
 const addItem = async () => {
+  loading.value = true
   currentLog.value.datetime = moment().format("DD-MM-YYYY HH:mm");
   let text = JSON.stringify(currentLog.value);
   await addDoc(logsRef, { text: text });
+  loading.value = false;
   router.push(`logs`);
 };
 
@@ -574,7 +588,6 @@ const loadLogs = async () => {
       return new Date(b.datetime) - new Date(a.datetime);
     });
   currentLog.value = logs.value.length > 0 ? logs.value[0] : log.value;
-  console.log(currentLog.value);
 };
 
 loadLogs();

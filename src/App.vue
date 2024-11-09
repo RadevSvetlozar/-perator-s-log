@@ -1,34 +1,66 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useDisplay } from "vuetify";
 const showMenu = ref(true);
+const { mobile } = useDisplay();
+// onMounted(() => {
+//   console.log(mobile.value); // false
+
+// });
 </script>
 
 <template>
   <v-responsive class="border rounded">
     <v-app>
       <v-app-bar :elevation="2">
-        <template v-slot:prepend>
+    
+        <template v-if="!mobile">
+          <v-btn to="/logs" class="ml-15">
+            <v-icon>mdi-view-list</v-icon>
+
+            Обходи
+          </v-btn>
+
+          <v-btn to="/new-log">
+            <v-icon>mdi-plus</v-icon>
+
+            Нов обход
+          </v-btn>
+        </template>
+        <v-app-bar-title>Дневник на оператора</v-app-bar-title>
+        <!-- <template v-slot:prepend v-if="!mobile">
           <v-app-bar-nav-icon
             @click="showMenu = !showMenu"
-            icon="$vuetify"
+            icon="mdi-menu"
           ></v-app-bar-nav-icon>
-        </template>
-
-        <v-app-bar-title>Дневник на оператора</v-app-bar-title>
+        </template> -->
       </v-app-bar>
 
-      <v-navigation-drawer v-model="showMenu">
-        <v-list>
-          <v-list-item to="/logs" title="Обходи"></v-list-item>
-          <v-list-item to="/new-log" title="Нов обход"></v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-
-      <v-main style="padding-left: 0;">
+      <v-main style="padding-left: 0">
         <v-container style="padding: 0">
           <router-view></router-view>
         </v-container>
       </v-main>
+
+      <v-bottom-navigation
+        v-if="mobile"
+        grow
+        v-model="value"
+        color="primary"
+        active
+      >
+        <v-btn to="/logs">
+          <v-icon>mdi-view-list</v-icon>
+
+          Обходи
+        </v-btn>
+
+        <v-btn to="/new-log">
+          <v-icon>mdi-plus</v-icon>
+
+          Нов обход
+        </v-btn>
+      </v-bottom-navigation>
     </v-app>
   </v-responsive>
 
@@ -79,7 +111,7 @@ main {
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: cover; /* Resize the background image to cover the entire container */
-  
+
   /* max-width: 1200px; */
 }
 </style>

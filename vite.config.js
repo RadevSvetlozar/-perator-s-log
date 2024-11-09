@@ -14,9 +14,9 @@ export default defineConfig({
     },
 
     manifest: {
-      name: 'OperatorS_Log',
-      short_name: 'OperatorS_Log',
-      description: 'OperatorS_Log',
+      name: 'Дневник на оператора',
+      short_name: 'Дневник на оператора',
+      description: 'Дневник на оператор в елетрическа подстанция',
       theme_color: '#ffffff',
     },
 

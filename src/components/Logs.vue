@@ -1,14 +1,21 @@
 <template>
-  <v-card color="silver" style="opacity: 0.8" class="pa-4 card">
-    <v-card-title>Всички обходи</v-card-title>
-  
+  <v-card
+    v-if="logs && logs.length > 0"
+    color="silver"
+    style="opacity: 0.8"
+    class="pa-4 card"
+  >
+    <v-card-title><h2>Всички обходи</h2></v-card-title>
+
     <v-card-text>
       <v-expansion-panels>
         <v-expansion-panel v-for="(log, index) in logs" :key="index">
-          <v-expansion-panel-title>{{ log.datetime }}
-            <v-icon class="ml-3 mr-3" color="red" v-if="log.note !== ''">mdi-note-alert-outline</v-icon>
-           
-            
+          <v-expansion-panel-title>
+            <h3>{{ log.datetime }}</h3>
+
+            <v-icon class="ml-3 mr-3" color="red" v-if="log.note !== ''"
+              >mdi-note-alert-outline</v-icon
+            >
           </v-expansion-panel-title>
           <v-expansion-panel-text>
             <div>
@@ -47,13 +54,18 @@
       <!-- <v-btn variant="outlined" color="orange"> Опресни</v-btn> -->
     </v-card-action>
   </v-card>
+  <NoData v-else-if="logs &&  logs.length === 0"></NoData>
+ 
+  <Loader v-else></Loader>
 </template>
 
 <script setup>
 import { firestore } from "../firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { ref } from "vue";
-const logs = ref([]);
+import Loader from "./Loader.vue";
+import NoData from "./NoData.vue";
+const logs = ref(null);
 const loadLogs = async () => {
   const citiesCol = collection(firestore, "logs");
   const citySnapshot = await getDocs(citiesCol);
