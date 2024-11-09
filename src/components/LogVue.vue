@@ -1,5 +1,5 @@
 <template>
-  <v-card color="silver" style="opacity: 0.8" class="pa-4" v-if="currentLog">
+  <v-card color="silver"  class="pa-0" style="opacity: 0.8;"  v-if="currentLog">
     <v-card-title
       ><span>Нов обход</span
       ><v-text-field
@@ -34,18 +34,20 @@
                 >
                   <template #append>
                     <v-btn
+                    size="large"
                       @click="
                         property.value =
                           Number(property.value) + Number(property.step)
                       "
-                      >+</v-btn
+                      ><h2>+</h2></v-btn
                     >
                     <v-btn
+                    size="large"
                       @click="
                         property.value =
                           Number(property.value) - Number(property.step)
                       "
-                      >-</v-btn
+                      ><h2>-</h2></v-btn
                     >
                   </template>
                 </v-text-field>
@@ -56,8 +58,8 @@
         <v-card-action> </v-card-action>
       </v-card>
     </v-card-text>
-    <v-card-action>
-      <v-btn variant="outlined" color="orange" @click="addItem">Запази</v-btn>
+    <v-card-action class="mb-16">
+      <v-btn size="large" variant="outlined" color="orange" @click="addItem">Запази</v-btn>
     </v-card-action>
   </v-card>
   <h2 v-else>Зареждане...</h2>
@@ -72,7 +74,7 @@ import moment from "moment";
 import router from "../router/index";
 const log = ref({
   name: "Обход",
-  note: "Няма забележки",
+  note: "",
   tAmb: 10,
   machines: [
     {
